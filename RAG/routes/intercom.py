@@ -51,7 +51,7 @@ async def intercom(background_tasks: BackgroundTasks, data: IntercomData = Body(
 
         # Iterate over tags to find relevant action
         for tag in tags:
-            if tag.get("id") == tag_id:
+            if tag.get("id") == str(tag_id):
                 user_message = extract_user_message(data.dict())
                 user_message = BeautifulSoup(user_message, features="html.parser").get_text()
 

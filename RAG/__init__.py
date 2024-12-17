@@ -9,7 +9,7 @@ openai.organization = os.getenv('ORG_ID')
 intercom_admin_id = os.getenv('intercom_admin_id')
 intercom_assignee_id = os.getenv('intercom_assignee_id')
 intercom_key = os.getenv('INTERCOM_KEY')
-tag_id = 7930796
+tag_id = 8185846
 
 intercom_continue_message = [
     'Ask further question'
