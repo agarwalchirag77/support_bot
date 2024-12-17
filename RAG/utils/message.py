@@ -125,12 +125,13 @@ def feedback_log(feedback):
         f.write(feedback + '\n')
 
 
-def get_gpt3_5_16k_response(messages: list):
+def get_gpt3_5_16k_response(messages: list, probability=False):
     # Todo: Optimize below hyper-parameters.
 
     print("Inside get_gpt3_5_16k_response")
     request_body = {
         "model": "gpt-4o-mini",
+        "logprobs": probability,
         "messages": messages,
     }
     headers = {
@@ -146,4 +147,4 @@ def get_gpt3_5_16k_response(messages: list):
         return intercom_default_response
     else:
         # Todo: Parser the message separately
-        return response['choices'][0]['message']['content'].strip()
+        return response['choices'][0]['message']['content'].strip(), response['choices'][0].get('logprobs')

@@ -1,3 +1,5 @@
+import math
+
 from RAG import support_bot_prompt, intercom_default_response, db_path, db_collection_name
 from RAG.utils.message import get_conversation
 from RAG.utils.message import num_tokens_from_messages
@@ -19,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 def generate_response(conversation_id, user_message, mode, response_url):
     messages = get_conversation(conversation_id=conversation_id, initial_system_instruction=support_bot_prompt)
-    user_message = rewrite_query_for_vector_search(messages, user_message)
-    print("Re-written query: " + user_message)
+    # user_message = rewrite_query_for_vector_search(messages, user_message)
+    # print("Re-written query: " + user_message)
     related_docs = search_documentation(db.get_collection(db.get_client(db_path), db_collection_name), user_message)
 
     if num_tokens_from_messages(messages=messages) > 54000:
@@ -32,7 +34,7 @@ def generate_response(conversation_id, user_message, mode, response_url):
         messages = [{
             "role": "system",
             "content": f"{support_bot_prompt}. "
-                       f"Summary of conversation till now: {get_gpt3_5_16k_response(messages=messages)}"
+                       f"Summary of conversation till now: {get_gpt3_5_16k_response(messages=messages)[0]}"
         }]
         print("Summarized convo success")
     messages.append({
@@ -50,13 +52,17 @@ def generate_response(conversation_id, user_message, mode, response_url):
 
         }
     )
+    content, logprob = get_gpt3_5_16k_response(messages=messages, probability=True)
+    confidence = 0
+    for each in logprob['content']:
+        confidence = confidence + math.exp(each['logprob'])
     messages.append(
         {
             "role": "assistant",
-            "content": get_gpt3_5_16k_response(messages=messages)
+            "content": content
         }
     )
-    print("Final response:" + messages[-1].get("content"))
+    # print("Final response:" + messages[-1].get("content") + '\n'+ 'Response Confidence:'+str(int((confidence*100) / len(logprob['content'])))+'%')
     messages.pop(-2)
     if valid_response(messages[-1].get("content")) and messages[-1].get("content") != "Incomplete Data":
         pass
@@ -72,10 +78,10 @@ def generate_response(conversation_id, user_message, mode, response_url):
         # feedback = f"[Feedback](https://docs.google.com/forms/d/e/1FAIpQLSeHC4kjcI8wZvquGUeEJE_Xny7mTOJ5x10owMjgD8MBZgu52Q/viewform?usp=pp_url&entry.1057886803={conversation_id}&entry.87765696=https://app.intercom.com/a/inbox/t7inwklp/inbox/conversation/{conversation_id}%23part_id%3Dcomment-{conversation_id}-{conversation_part_id})"
         # message = messages[-1].get(
         #     "content") + '\n' + feedback
-        print(messages[-1].get("content"))
+        # print(messages[-1].get("content"))
 
         # feedback_log(feedback)
-        if post_to_intercom(conversation_id=conversation_id, message=messages[-1].get("content")):
+        if post_to_intercom(conversation_id=conversation_id, message=messages[-1].get("content")+ '\n'+ 'Response Confidence:'+str(int((confidence*100) / len(logprob['content'])))+'%'):
             print("Post to intercom success")
     elif mode == 'slack':
         feedback_response = "\n\nPlease Add your feedback for the response in the form " \
