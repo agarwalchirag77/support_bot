@@ -1,4 +1,4 @@
-#!/Users/hevo/Documents/support-gpt-master/venv/bin/python3.12
+#!/Users/hevo/Documents/support-gpt-master/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

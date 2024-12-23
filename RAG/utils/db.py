@@ -28,6 +28,7 @@ def get_embedding_function(key: openai.api_key, model: str) -> embedding_functio
     )
 
 
+
 def get_collection(client: chromadb.PersistentClient, name: str) -> chromadb.Collection:
     """Retrieve or create a ChromaDB collection with metadata and embedding function."""
     try:

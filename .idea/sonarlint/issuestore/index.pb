@@ -29,10 +29,6 @@ D
 RAG/routes/health.py,b/3/b34045fab02d247995cb3091ceb970fec9b0f4f5
 ?
 RAG/utils/db.py,e/a/ea059c0c4a66cf1c3a111a39c40d2a33f506df8b
-C
-chat_logs/123.jsonl,2/6/261950340678abeb914fbc9a4ffb9a7ea0b1702f
-D
-requirements_bkp.txt,0/7/071919099cc2c8e2eb863c2ce5f731f69979eeed
 ?
 RAG/__init__.py,5/4/54a8801669c1740bd14469aa9fb59cb0788d9fdd
 F
@@ -41,7 +37,6 @@ D
 RAG/utils/message.py,9/9/99b5b5226b1bfb011b2a99a003b8a7c5ed64ded4
 I
 RAG/utils/openai_utils.py,3/0/305affae6f1dd08496b4df293fd40d64fd5f16f7
-C
-chat_logs/146.jsonl,2/a/2a340fbef087751efa988547e4e3625fc9b8b580
-C
-chat_logs/147.jsonl,a/d/ada6b98326a1fcce6edb7064220d126f86de7d55
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
