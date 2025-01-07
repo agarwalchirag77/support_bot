@@ -12,7 +12,8 @@ intercom_key = os.getenv('INTERCOM_KEY')
 tag_id = 8185846
 
 intercom_continue_message = [
-    'Ask further question'
+    'Ask further question',
+    'Continue discussion'
 ]
 intercom_break_message = [
     'Talk to person'

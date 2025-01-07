@@ -1,3 +1,6 @@
+import time
+
+import math
 import requests
 import json
 from RAG import intercom_key, intercom_admin_id, tag_id
@@ -26,7 +29,7 @@ def delete_tag(conversation_id):
 
 def post_to_intercom(conversation_id, message):
     request_body = {
-        "message_type": "note",
+        "message_type": "comment",
         "type": "admin",
         "admin_id": intercom_admin_id,
         "body": message.replace('\n', '<br>')
@@ -57,17 +60,16 @@ def post_to_intercom(conversation_id, message):
         print(f"An unexpected error occurred: {e}")  # Handle any other unexpected errors
     else:
         print(f"Message posted successfully: {response.status_code}")
-        return 1
 
-
-    # request_body = {
-    #     "message_type": "snoozed",
-    #     "admin_id": intercom_admin_id,
-    #     "snoozed_until": str(math.ceil(time.time()) + 5 * 60)
-    # }
-    # intercom_parts_url = f"https://api.intercom.io/conversations/{conversation_id}/parts"
-    # response = requests.post(url=intercom_parts_url, data=json.dumps(request_body), headers=headers)
+    request_body = {
+        "message_type": "snoozed",
+        "admin_id": 6500280,
+        "snoozed_until": str(math.ceil(time.time()) + 5 * 60)
+    }
+    intercom_parts_url = f"https://api.intercom.io/conversations/{conversation_id}/parts"
+    response = requests.post(url=intercom_parts_url, data=json.dumps(request_body), headers=headers)
     # print(response.json())
+    return 1
 
 
 def assign_to_team(conversation_id):
