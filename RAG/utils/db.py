@@ -76,7 +76,7 @@ def query_collection(collection: chromadb.Collection, query_texts: List[str], n_
     """Query the ChromaDB collection."""
     try:
         results = collection.query(query_texts=query_texts, n_results=n_results)
-        logger.info(f"Search Query executed successfully. Results: {results}")
+        logger.info(f"Search Query executed successfully.")
         return results
     except Exception as e:
         logger.error(f"Error querying the collection: {e}")

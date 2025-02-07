@@ -1,6 +1,9 @@
 
-mpython:S11921"IDefine a constant instead of duplicating this literal " Title:'" 3 times.(ªÊÂÍøÿÿÿÿ8øÛµ£½2
-zpython:S11921"VDefine a constant instead of duplicating this literal "' Document content: '" 3 times.(ªÊÂÍøÿÿÿÿ8ùÛµ£½2
-Bpython:S125"Remove this commented out code.(·è·ıÿÿÿÿ8ùÛµ£½2
-Gpython:S108D")Either remove or fill this block of code.(ã‘Û¾8úÛµ£½2
-Bpython:S125N"Remove this commented out code.(¹„ç£øÿÿÿÿ8úÛµ£½2
+mpython:S1192F"IDefine a constant instead of duplicating this literal " Title:'" 3 times.(ªÊÂÍøÿÿÿÿ8†èñÍ2
+zpython:S1192F"VDefine a constant instead of duplicating this literal "' Document content: '" 3 times.(ªÊÂÍøÿÿÿÿ8èñÍ2
+Rpython:S1172"4Remove the unused function parameter "response_url".(éóéD8èñÍ2
+Bpython:S125"Remove this commented out code.(¹„ç£øÿÿÿÿ8˜èñÍ2
+Bpython:S125."Remove this commented out code.(·è·ıÿÿÿÿ8ŸèñÍ2
+Gpython:S108X")Either remove or fill this block of code.(ã‘Û¾8£èñÍ2
+\python:S5754û"<Specify an exception class to catch or reraise the exception(ˆÊÉ·8¥èñÍ2
+>python:S125‘"Remove this commented out code.(ÔÈ»Õ8«èñÍ2

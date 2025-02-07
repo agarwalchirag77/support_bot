@@ -9,6 +9,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="modifyBaseFiles" value="true" />
+  </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="f6ef16c8-34c6-43e3-ac46-5d798553b484" />
   </component>

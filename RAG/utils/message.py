@@ -2,11 +2,15 @@ from RAG import chat_log_dir
 import os
 import json
 import tiktoken
-from RAG import intercom_default_response, openai, rewrite_query_prompt
+from RAG import intercom_default_response, openai, rewrite_query_prompt, claude_api_key
 from RAG.utils.db import query_collection
 import requests
 import chromadb
+import anthropic
+import logging
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def rewrite_query_for_vector_search(context, query: str) -> str:
     """
@@ -98,7 +102,7 @@ def num_tokens_from_messages(messages, model="gpt-4o-mini"):
                 if key == "name":  # if there's a name, the role is omitted
                     num_tokens += -1  # role is always required and always 1 token
         num_tokens += 2  # every reply is primed with <im_start>assistant
-        print(f"Tokens: {num_tokens}")
+        logger.info(f"Tokens: {num_tokens}")
         return num_tokens
     else:
         raise NotImplementedError(f"""num_tokens_from_messages() is not presently implemented for model {model}. See 
@@ -126,25 +130,57 @@ def feedback_log(feedback):
 
 
 def get_gpt3_5_16k_response(messages: list, probability=False):
-    # Todo: Optimize below hyper-parameters.
+    logger.info("Inside get_gpt3_5_16k_response")
 
-    print("Inside get_gpt3_5_16k_response")
     request_body = {
         "model": "gpt-4o-mini",
         "logprobs": probability,
         "messages": messages,
     }
+
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {openai.api_key}"
     }
-    openai_chat_completion_url = "https://api.openai.com/v1/chat/completions"
-    text_completion_response = requests.post(url=openai_chat_completion_url, data=json.dumps(request_body),
-                                             headers=headers, timeout=60)
 
-    response = text_completion_response.json()
-    if text_completion_response.status_code != 200:
-        return intercom_default_response
-    else:
-        # Todo: Parser the message separately
-        return response['choices'][0]['message']['content'].strip(), response['choices'][0].get('logprobs')
+    openai_chat_completion_url = "https://api.openai.com/v1/chat/completions"
+
+    try:
+        response = requests.post(url=openai_chat_completion_url, data=json.dumps(request_body),
+                                 headers=headers, timeout=60)
+        response.raise_for_status()  # Raises HTTPError for bad responses (4xx and 5xx)
+        response_data = response.json()
+
+        if probability:
+            return response_data['choices'][0]['message']['content'].strip(), response_data['choices'][0].get('logprobs')
+        else:
+            return response_data['choices'][0]['message']['content'].strip()
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"API request failed: {str(e)}", exc_info=True)
+        return "API request failed. Please try again later."
+
+    except KeyError as e:
+        logger.error(f"Unexpected response format: {str(e)}", exc_info=True)
+        return "Unexpected response format. Please contact support."
+
+    except Exception as e:
+        logger.error(f"An error occurred: {str(e)}", exc_info=True)
+        return "An unexpected error occurred. Please try again later."
+
+
+# def get_haiku_20241022(messages: list):
+#     client = anthropic.Anthropic(
+#         api_key=claude_api_key,
+#     )
+#     system=messages.pop(0)
+#     # print (system)
+#     # # print (system['content'])
+#     message = client.messages.create(
+#         model="claude-3-5-haiku-20241022",
+#         max_tokens=4096,
+#         temperature=0,
+#         system=system['content'],
+#         messages=messages
+#     )
+#     return message.content

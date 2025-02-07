@@ -7,7 +7,7 @@ import logging
 from RAG.utils.parser import extract_user_message
 from RAG.outbridge.intercom import pass_to_person
 from RAG import intercom_break_message, intercom_continue_message, tag_id
-from RAG.utils.openai_utils import generate_response
+from RAG.utils.openai_utils import generate_response, generate_response_test
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -62,7 +62,7 @@ async def intercom(background_tasks: BackgroundTasks, data: IntercomData = Body(
                     pass_to_person(conversation_id)
                     logger.info(f"Conversation {conversation_id} passed to a person.")
                 else:
-                    background_tasks.add_task(generate_response, conversation_id, user_message, 'intercom', None)
+                    background_tasks.add_task(generate_response_test, conversation_id, user_message, 'intercom', None)
                     logger.info(f"Generating response for conversation ID: {conversation_id}")
                 break
         else:
